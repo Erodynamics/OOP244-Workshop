@@ -12,8 +12,36 @@ namespace sdds {
       Account(int number, double balance);
       std::ostream& display()const;
 
+      // Type conversion operators
+      operator bool()const;
+      operator int()const;
+      operator double()const;
 
+      // Unary member operator
+      bool operator ~ ()const;
 
+      // Assign Account Number
+      Account& operator = (int accNum);
+
+      // Move Account
+      Account& operator = (Account acc);
+
+      // Deposit
+      Account& operator += (double bal);
+
+      // Withdraw
+      Account& operator -= (double bal);
+
+      // Move Funds
+      Account& operator << (Account rightAcc);
+
+      // Move Funds
+      Account& operator >> (Account rightAcc);
+
+      // Get Sum (lol)
+      double operator + (const Account& acc);
+
+      double& operator += (const Account& acc);
    };
    
    

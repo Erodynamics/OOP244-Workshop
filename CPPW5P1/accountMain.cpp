@@ -13,15 +13,15 @@ void displayAccounts(const Account* acc, int num) {
    cout << "+---+-------+--------------+" << endl;
    cout << "|ROW| ACC#  |    BALANCE   |" << endl;
    cout << "+---+-------+--------------+" << endl;
-      for (int i = 0; i < num; i++) {
-         cout << "|";
-         cout.width(3);
-         cout.fill('0');
-         cout<< (i + 1) << "|";
-         cout.fill(' ');
-      acc[i].display() <<"|" << endl;
+	  for (int i = 0; i < num; i++) {
+		 cout << "|";
+		 cout.width(3);
+		 cout.fill('0');
+		 cout<< (i + 1) << "|";
+		 cout.fill(' ');
+	  acc[i].display() <<"|" << endl;
    }
-      cout << "+---+-------+--------------+" << endl;
+	  cout << "+---+-------+--------------+" << endl;
 }
 void displayAccount(const Account& acc) {
    displayAccounts(&acc, 1);
@@ -30,7 +30,7 @@ void displayRawAccountNumber(const Account* acc, int num) {
    cout << "Display raw account numbers of all the accounts " << endl;
    cout << " using int conversion operator" << endl;
    for (int i = 0; i < num; i++) {
-      cout << int(acc[i]) << " ";
+	  cout << int(acc[i]) << " ";
    }
    cout << endl;
 }
@@ -38,34 +38,34 @@ void displayRawBalances(const Account* acc, int num) {
    cout << "Display raw balances of the accounts: " << endl;
    cout << " using double conversion operator" << endl;
    for (int i = 0; i < num; i++) {
-      cout << double(acc[i]) << " ";
+	  cout << double(acc[i]) << " ";
    }
    cout << endl;
 }
 int countNewAccounts(const Account* acc, int num) {
    int sum = 0;
    for (int i = 0; i < num; i++) {
-      sum += ~acc[i];
+	  sum += ~acc[i];
    }
    return sum;
 }
 int countBadAccounts(const Account* acc, int num) {
    int sum = 0;
    for (int i = 0; i < num; i++) {
-      sum += !acc[i] && !~acc[i];
+	  sum += !acc[i] && !~acc[i];
    }
    return sum;
 }
 int main() {
    double value;
    Account mixed[10] = {
-      {11111, 111.11},  
-      {22222, 222.22},  
-      {333, 333.333},   // invalid
-      {44444, 4444.44},
-      {55555, 555.55},
-      {66666, -66.66},  // invalid
-      {77777, 777.77}
+	  {11111, 111.11},  
+	  {22222, 222.22},  
+	  {333, 333.333},   // invalid
+	  {44444, 4444.44},
+	  {55555, 555.55},
+	  {66666, -66.66},  // invalid
+	  {77777, 777.77}
    };
    cout << "Using bool conversion overload and operator ~ to print the accounts: " << endl;
    displayAccounts(mixed, 10);

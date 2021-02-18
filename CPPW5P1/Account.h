@@ -1,3 +1,4 @@
+#pragma once
 #ifndef SDDS_ACCOUNT_H_
 #define SDDS_ACCOUNT_H_
 #include <iostream>
@@ -41,6 +42,7 @@ namespace sdds {
       // Get Sum (lol)
       double operator + (const Account& acc);
 
+      // Get sum (lol) and store
       double& operator += (const Account& acc);
    };
    

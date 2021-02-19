@@ -69,10 +69,8 @@ namespace sdds {
    }
 
    Account& Account::operator=(int accNum) {
-	   if (accNum >= 10000) {
+	   if (accNum >= 10000 && m_number == 0) {
 		   m_number = accNum;
-	   } else {
-		   m_number = -1;
 	   }
 	   return *this;
    }
@@ -80,7 +78,7 @@ namespace sdds {
    Account& Account::operator=(Account& acc) {
 	   int tempNumber;
 	   double tempBalance;
-	   if (*this || acc) {
+	   if (~*this || acc) {
 		   // Move Account Number
 		   tempNumber = m_number;
 		   m_number = acc.m_number;

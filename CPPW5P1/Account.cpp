@@ -56,7 +56,7 @@ namespace sdds {
    }
 
    bool Account::operator~() const {
-	   return (m_number < 10000 || m_balance == 0);
+	   return (m_number == 0);
    }
 
    Account& Account::operator=(int accNum) {
@@ -68,15 +68,19 @@ namespace sdds {
 	   return *this;
    }
 
-   Account& Account::operator=(Account acc) {
+   Account& Account::operator=(Account& acc) {
+	   int tempNumber;
+	   double tempBalance;
 	   if (*this || acc) {
 		   // Move Account Number
+		   tempNumber = m_number;
 		   m_number = acc.m_number;
-		   acc.m_number = 0;
+		   acc.m_number = tempNumber;
 
 		   // Move Balance
+		   tempBalance = m_balance;
 		   m_balance = acc.m_balance;
-		   acc.m_balance = 0;
+		   acc.m_balance = tempBalance;
 	   }
 	   return *this;
    }
@@ -91,16 +95,18 @@ namespace sdds {
    }
 
    Account& Account::operator-=(double bal) {
-	   if (*this) {
-		   if (bal > 0) {
-			   m_balance -= bal;
+	   double temp = 0;
+	   if (*this && bal > 0) {
+		   temp = (double)*this - bal;
+		   if (temp > 0) {
+			   m_balance = temp;
 		   }
 	   }
 	   return *this;
    }
 
-   Account& Account::operator<<(Account rightAcc) {
-	   if (*this || rightAcc) {
+   Account& Account::operator<<(Account& rightAcc) {
+	   if (*this && rightAcc) {
 		   if (m_number != rightAcc.m_number) {
 			   m_balance += rightAcc.m_balance;
 			   rightAcc.m_balance = 0;
@@ -109,24 +115,19 @@ namespace sdds {
 	   return *this;
    }
 
-   Account& Account::operator>>(Account rightAcc) {
-	   if (*this || rightAcc) {
+   Account& Account::operator>>(Account& rightAcc) {
+	   if (*this && rightAcc) {
 		   rightAcc.m_balance += m_balance;
 		   m_balance = 0;
 	   }
 	   return *this;
    }
 
-   double Account::operator+(const Account& acc) {
-	   return m_balance + acc.m_balance;
+   double operator+(const Account& leftAcc, const Account& rightAcc) {
+	   return (double)leftAcc + (double)rightAcc;
    }
 
-   double& Account::operator+=(const Account& acc) {
-	   if (*this || acc) {
-		   return m_balance += acc.m_balance;
-	   } else {
-		   return m_balance += 0;
-	   }
+   double operator+=(double& bal, const Account& acc) {
+	   return bal += (double)acc;
    }
-
 }

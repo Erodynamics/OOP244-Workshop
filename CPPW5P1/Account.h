@@ -25,7 +25,7 @@ namespace sdds {
       Account& operator = (int accNum);
 
       // Move Account
-      Account& operator = (Account acc);
+      Account& operator = (Account& acc);
 
       // Deposit
       Account& operator += (double bal);
@@ -34,18 +34,17 @@ namespace sdds {
       Account& operator -= (double bal);
 
       // Move Funds
-      Account& operator << (Account rightAcc);
+      Account& operator << (Account& rightAcc);
 
       // Move Funds
-      Account& operator >> (Account rightAcc);
-
-      // Get Sum (lol)
-      double operator + (const Account& acc);
-
-      // Get sum (lol) and store
-      double& operator += (const Account& acc);
+      Account& operator >> (Account& rightAcc);
    };
-   
+
+   // Get Sum
+   double operator + (const Account& leftAcc, const Account& rightAcc);
+
+   // Get sum and store
+   double operator += (double& bal, const Account& acc);
    
 }
 #endif // SDDS_ACCOUNT_H_

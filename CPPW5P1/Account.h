@@ -1,3 +1,12 @@
+// Workshop 5: Lab
+// Date: 2/18/21
+// Author: Jean Blaise Odasco
+// Student #: 114351190
+// Class: OOP244
+// I have done all the coding by myself and only copied the code that my professor provided to
+// complete my workshops and assignments.
+//
+///////////////////////////////////////////////////
 #pragma once
 #ifndef SDDS_ACCOUNT_H_
 #define SDDS_ACCOUNT_H_

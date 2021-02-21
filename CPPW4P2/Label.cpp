@@ -86,7 +86,7 @@ namespace sdds {
 			for (int i = 0; i < contentLen + 2; i++) {
 				std::cout << frame[5];
 			}
-			return std::cout << frame[4] ;
+			return std::cout << frame[4];
 		}
 		else {
 			return std::cout;

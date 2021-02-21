@@ -39,9 +39,7 @@ namespace sdds {
 	void LabelMaker::printLabels() {
 		for (int i = 0; i < labelsCreated; i++) {
 			Labels[i].printLabel();
-			if (i != labelsCreated - 1) {
-				std::cout << std::endl;
-			}
+			std::cout << std::endl;
 		}
 	}
 }

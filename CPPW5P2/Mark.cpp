@@ -6,77 +6,69 @@
 namespace sdds {
 	void Mark::setEmpty() {
 		markPercent = 0;
-		grade = 'X';
-		gpa = 0.0;
 	}
 
-	char Mark::calculateGrade(int mark) {
-		if (mark < 50) {
+	Mark::Mark() {
+		markPercent = 0;
+	}
+
+	Mark::Mark(int newStudentMark) {
+		markPercent = newStudentMark;
+	}
+
+	Mark::operator int() const {
+		if (0 <= markPercent && markPercent <= 100) {
+			return markPercent;
+		} else {
+			return 0;
+		}
+	}
+
+	Mark::operator double() const {
+		if (0 <= markPercent && markPercent < 50) {
+			return 0;
+		}
+		if (50 <= markPercent && markPercent < 60) {
+			return 1;
+		}
+		if (60 <= markPercent && markPercent < 70) {
+			return 2;
+		}
+		if (70 <= markPercent && markPercent < 80) {
+			return 3;
+		}
+		if (80 <= markPercent && markPercent <= 100) {
+			return 4;
+		}
+		return 0;
+	}
+
+	Mark::operator char() const {
+		if (1 <= markPercent && markPercent < 50) {
 			return 'F';
 		}
-		if (mark > 50 && mark <= 60) {
+		if (50 <= markPercent && markPercent < 60) {
 			return 'D';
 		}
-		if (mark > 60 && mark <= 70) {
+		if (60 <= markPercent && markPercent < 70) {
 			return 'C';
 		}
-		if (mark > 70 && mark <= 80) {
+		if (70 <= markPercent && markPercent < 80) {
 			return 'B';
 		}
-		if (mark > 80 && mark <= 100) {
+		if (80 <= markPercent && markPercent <= 100) {
 			return 'A';
 		}
 		return 'X';
 	}
 
-	double Mark::calculateGPA(int mark) {
-		if (mark > 50 && mark <= 60) {
-			return 1.0;
-		}
-		if (mark > 60 && mark <= 70) {
-			return 2.0;
-		}
-		if (mark > 70 && mark <= 80) {
-			return 3.0;
-		}
-		if (mark > 80 && mark <= 100) {
-			return 4.0;
-		}
-		return 0.0;
-	}
-
-	Mark::Mark() {
-		markPercent = 0;
-		grade = 'X';
-		gpa = 0.0;
-	}
-
-	Mark::Mark(int newStudentMark) {
-		if (newStudentMark > 0 && newStudentMark <= 100) {
-			markPercent = newStudentMark;
-			grade = calculateGrade(markPercent);
-			gpa = calculateGPA(markPercent);
+	Mark& sdds::Mark::operator+=(int addedMark) {
+		int combinedMarks = addedMark + markPercent;
+		if (0 <= combinedMarks && combinedMarks <= 100) {
+			markPercent = combinedMarks;
 		} else {
 			markPercent = 0;
-			grade = 'X';
-			gpa = 0.0;
 		}
-	}
-
-	Mark::operator int() const {
-		return markPercent;
-	}
-
-	Mark::operator double() const {
-		return gpa;
-	}
-
-	Mark::operator char() const {
-		return grade;
-	}
-
-	Mark& sdds::Mark::operator+=(int addedMark) {
-		
 		return *this;
 	}
 
@@ -89,12 +81,12 @@ namespace sdds {
 		return *this;
 	}
 
-	int operator+=(int addedMarks, const Mark& studentMarks) {
-		int combinedMarks = addedMarks + (int)studentMarks;
-		if (combinedMarks >= 0 && combinedMarks <= 100) {
-			return combinedMarks;
+	int operator+=(int& addedMark, const Mark& studentMarks) {
+		if (0 <= addedMark && addedMark <= 100 && 
+			0 <= (int)studentMarks && (int)studentMarks <= 100) {
+			return addedMark += (int)studentMarks;
 		} else {
-			return addedMarks;
+			return addedMark;
 		}
 	}
 }

@@ -5,11 +5,7 @@
 namespace sdds {
 	class Mark {
 		int markPercent;
-		char grade;
-		double gpa;
 		void setEmpty();
-		char calculateGrade(int mark);
-		double calculateGPA(int mark);
 	public:
 		Mark();
 		Mark(int newStudentMark);
@@ -20,7 +16,7 @@ namespace sdds {
 		Mark& operator += (int addedMark);
 		Mark& operator = (int assignedMark);
 	};
-	int operator += (int addedMarks, const Mark& studentMarks);
+	int operator += (int& addedMarks, const Mark& studentMarks);
 }
 
 #endif // !_SDDS_MARK_H

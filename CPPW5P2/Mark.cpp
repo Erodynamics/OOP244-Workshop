@@ -1,3 +1,12 @@
+// Workshop 5: DIY
+// Date: 2/21/21
+// Author: Jean Blaise Odasco
+// Student #: 114351190
+// Class: OOP244
+// I have done all the coding by myself and only copied the code that my professor provided to
+// complete my workshops and assignments.
+//
+///////////////////////////////////////////////////
 #define _CRT_SECURE_NO_WARNINGS
 #include <cstring>
 #include <iostream>
@@ -82,8 +91,7 @@ namespace sdds {
 	}
 
 	int operator+=(int& addedMark, const Mark& studentMarks) {
-		if (0 <= addedMark && addedMark <= 100 && 
-			0 <= (int)studentMarks && (int)studentMarks <= 100) {
+		if (0 <= (int)studentMarks && (int)studentMarks <= 100) {
 			return addedMark += (int)studentMarks;
 		} else {
 			return addedMark;

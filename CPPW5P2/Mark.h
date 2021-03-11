@@ -1,3 +1,12 @@
+// Workshop 5: DIY
+// Date: 2/21/21
+// Author: Jean Blaise Odasco
+// Student #: 114351190
+// Class: OOP244
+// I have done all the coding by myself and only copied the code that my professor provided to
+// complete my workshops and assignments.
+//
+///////////////////////////////////////////////////
 #pragma once
 #ifndef _SDDS_MARK_H
 #define _SDDS_MARK_H

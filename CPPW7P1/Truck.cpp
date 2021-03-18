@@ -9,10 +9,10 @@ namespace sdds {
 	}
 
 	bool Truck::addCargo(double cargo) {
-		double diff = m_capacity - (m_cargoLoad + cargo);
-		if (m_cargoLoad + cargo > m_capacity) {
-			if (diff < 0) {
-				m_cargoLoad += diff * 2;
+		double emptySpace = m_capacity - m_cargoLoad;
+		if (emptySpace - cargo < 0) {
+			if (emptySpace != 0) {
+				m_cargoLoad = m_capacity;
 				return true;
 			} else {
 				return false;
@@ -24,8 +24,8 @@ namespace sdds {
 	}
 
 	bool Truck::unloadCargo() {
-		m_cargoLoad = 0;
-		if (m_cargoLoad == 0) {
+		if (m_cargoLoad != 0) {
+			m_cargoLoad = 0;
 			return true;
 		} else {
 			return false;

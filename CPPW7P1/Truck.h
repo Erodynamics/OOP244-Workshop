@@ -13,8 +13,11 @@ namespace sdds {
 		Truck(const char* licensePlate, int year, double capacity, const char* address);
 		bool addCargo(double cargo);
 		bool unloadCargo();
-		std::ostream& write(std::ostream& os, Truck truck);
-		std::istream& read(std::istream& in, Truck truck);
+		std::ostream& write(std::ostream& os) const;
+		std::istream& read(std::istream& in);
+
+		friend std::ostream& operator<<(std::ostream& os, const Truck& vehicle);
+		friend std::istream& operator>>(std::istream& in, Truck& vehicle);
 	};
 }
 

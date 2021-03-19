@@ -11,8 +11,9 @@ namespace sdds {
 	public:
 		MotorVehicle(const char* licensePlate, int year);
 		void moveTo(const char* address);
-		std::ostream& write(std::ostream& os);
+		std::ostream& write(std::ostream& os)const;
 		std::istream& read(std::istream& in);
+
 		// Stream stuff not implemented
 		friend std::ostream& operator<<(std::ostream& os, const MotorVehicle& vehicle);
 		friend std::istream& operator>>(std::istream& in, MotorVehicle& vehicle);

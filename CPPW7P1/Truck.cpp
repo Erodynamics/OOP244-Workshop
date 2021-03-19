@@ -33,20 +33,15 @@ namespace sdds {
 	}
 
 	std::ostream& Truck::write(std::ostream& os) const {
-		return MotorVehicle::write(os) << " | " << m_cargoLoad << " / " << m_capacity;
+		return MotorVehicle::write(os) << " | " << m_cargoLoad << "/" << m_capacity;
 	}
 
 	std::istream& Truck::read(std::istream& in) {
-		Truck temp("", 0, 0, "");
-		temp.MotorVehicle::read(in);
+		MotorVehicle::read(in);
 		std::cout << "Capacity: ";
-		in >> temp.m_capacity;
+		in >> m_capacity;
 		std::cout << "Cargo: ";
-		in >> temp.m_cargoLoad;
-
-		// Time to copy
-		m_capacity = temp.m_capacity;
-		m_cargoLoad = temp.m_cargoLoad;
+		in >> m_cargoLoad;
 		return in;
 	}
 

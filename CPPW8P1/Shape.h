@@ -9,8 +9,11 @@ namespace sdds {
 		virtual ~Shape() = 0;
 		virtual void draw(std::ostream& ostr) = 0;
 		virtual void getSpecs(std::istream& istr) = 0;
-		virtual std::ostream& operator<<(std::ostream& ostr) = 0;
-		virtual std::istream& operator>>(std::istream& istr) = 0;
+
+		std::ostream& operator<<(std::ostream& ostr);
+		std::istream& operator>>(std::istream& istr);
+		friend std::ostream& operator<<(std::ostream& ostr, Shape& shape);
+		friend std::istream& operator>>(std::istream& istr, Shape& shape);
 	};
 }
 

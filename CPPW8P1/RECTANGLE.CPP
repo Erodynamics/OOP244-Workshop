@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "Rectangle.h"
 
 namespace sdds {
@@ -15,7 +16,8 @@ namespace sdds {
 		}
 	}
 
-	void Rectangle::draw(std::ostream& ostr)const {
+	void Rectangle::draw(std::ostream& ostr) {
+		int labelLen = strlen(label());
 		// Top
 		ostr << '+';
 		for (int i = 0; i < m_width - 2; i++) {
@@ -24,6 +26,23 @@ namespace sdds {
 		ostr << '+';
 
 		// Sides + Text NOT DONE
+		
+		ostr << '|' << std::left;
+		ostr << label();
+		ostr << ostr.flags();
+		for (int i = 0; i < m_width - labelLen - 1; i++) {
+			ostr << ' ';
+		}
+		ostr << '|';
+		
+		
+		// Sides
+		ostr << '|';
+		for (int i = 0; i < m_width - 2; i++) {
+			ostr << ' ';
+		}
+		ostr << '|';
+		
 
 		// Bottom
 		ostr << '+';
@@ -33,6 +52,10 @@ namespace sdds {
 		ostr << '+';
 	}
 	void Rectangle::getSpecs(std::istream& istr) {
-		char* temp;
+		
+		LblShape::getSpecs(istr);
+		if (istr.good()) {
+			
+		}
 	}
 }

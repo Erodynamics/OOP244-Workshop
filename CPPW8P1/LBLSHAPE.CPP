@@ -22,7 +22,16 @@ namespace sdds {
 	}
 
 	void LblShape::getSpecs(std::istream& istr) {
-		
+		char temp[256];
+
+		// Reads comma-delimited stream and places the cstring into m_label.
+		if (istr.good()) {
+			istr.getline(temp, 256, ',');
+			m_label = new char[strlen(temp) + 1]();
+			strcpy(m_label, temp);
+		} else {
+			std::cerr << "Stream is not usable.";
+		}
 	}
 
 	std::ostream& LblShape::operator<<(std::ostream& ostr) {

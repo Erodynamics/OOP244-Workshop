@@ -10,7 +10,7 @@ namespace sdds {
 	public:
 		Line();
 		Line(const char* label, float length);
-		void draw(std::ostream& ostr)const;
+		void draw(std::ostream& ostr);
 		void getSpecs(std::istream& istr);
 	};
 }

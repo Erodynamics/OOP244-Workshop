@@ -29,11 +29,7 @@ namespace sdds {
 		// Reads comma-delimited stream and converts cstring into an int to be placed into m_length.
 		if (istr.good()) {
 			istr.getline(temp, 256, ',');
-<<<<<<< HEAD
 			m_length = std::stof(temp);
-=======
-			m_length = atoi(temp);
->>>>>>> fd6de2add8787f4f9099a810e8675e0a05d39500
 		} else {
 			std::cerr << "Stream is not usable.";
 		}

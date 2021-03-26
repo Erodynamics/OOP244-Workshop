@@ -16,9 +16,6 @@ namespace sdds {
 		LblShape(const LblShape&) = delete;
 		LblShape operator=(const LblShape&) = delete;
 		void getSpecs(std::istream& istr) override;
-
-		std::ostream& operator<<(std::ostream& ostr);
-		std::istream& operator>>(std::istream& istr);
 	};
 }
 

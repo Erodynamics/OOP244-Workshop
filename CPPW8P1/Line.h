@@ -1,8 +1,9 @@
 #pragma once
 #ifndef _SDDS_LINE_H
+#define _SDDS_LINE_H
+
 #include <iostream>
 #include "LblShape.h"
-#define _SDDS_LINE_H
 
 namespace sdds {
 	class Line : public LblShape {

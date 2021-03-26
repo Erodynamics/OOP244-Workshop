@@ -28,6 +28,7 @@ namespace sdds {
 		// Reads comma-delimited stream and places the cstring into m_label.
 		if (istr.good()) {
 			istr.getline(temp, 256, ',');
+			istr.get();
 			m_label = new char[strlen(temp) + 1]();
 			strcpy(m_label, temp);
 		} else {

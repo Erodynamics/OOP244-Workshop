@@ -27,6 +27,7 @@ namespace sdds {
 
 		// Sides + Text NOT DONE
 		
+<<<<<<< HEAD
 		ostr << '|' << std::left;
 		ostr << label();
 		ostr << ostr.flags();
@@ -43,6 +44,8 @@ namespace sdds {
 		}
 		ostr << '|';
 		
+=======
+>>>>>>> fd6de2add8787f4f9099a810e8675e0a05d39500
 
 		// Bottom
 		ostr << '+';

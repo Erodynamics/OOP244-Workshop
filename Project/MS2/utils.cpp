@@ -1,8 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <string>
 #include <cstring>
 #include "utils.h"
 #include "Time.h"
@@ -19,7 +16,7 @@ namespace sdds {
 				cin.clear();
 				cin >> t;   // needs extraction operator overloaded for Time
 				if (!cin) {
-					cout << "Invlid time, try agian (HH:MM): ";
+					cout << "Invalid time, try agian (HH:MM): ";
 					cin.clear();
 				} else {
 					mins = int(t);
@@ -33,7 +30,7 @@ namespace sdds {
 		}
 		return mins;
 	}
-	// Part of this code was written by 
+
 	int getInt(const char* prompt) {
 		bool valid = true;
 		int input = -1;
@@ -47,15 +44,17 @@ namespace sdds {
 			std::cin >> input;
 			if (std::cin.fail()) {
 				std::cin.clear();
+				std::cin.ignore(512, '\n');
 				valid = false;
 				std::cout << "Bad integer value, try again: ";
-			}
-
-			if (std::cin.get() != '\n') {
+			} else if (std::cin.get() != '\n') {
 				std::cin.clear();
+				std::cin.ignore(512, '\n');
 				valid = false;
 				std::cout << "Enter only an integer, try again: ";
 			}
+
+			
 		} while (!valid);
 		return input;
 	}
@@ -89,7 +88,7 @@ namespace sdds {
 		char temp[256] = { 0 };
 		if (prompt != NULL) {
 			std::cout << prompt;
-			if (delimiter != NULL) {
+			if (delimiter != '\0') {
 				istr.getline(temp, 256, delimiter);
 			} else {
 				istr.getline(temp, 256);
@@ -99,9 +98,11 @@ namespace sdds {
 		strcpy(returned, temp);
 		return returned;
 	}
+
 	int getHour(int minutes) {
 		return minutes / 60;
 	}
+
 	int getMinute(int minutes) {
 		return minutes % 60;
 	}

@@ -4,7 +4,7 @@
 
 namespace sdds {
    class Time {
-      unsigned int m_min;
+      int m_min;
    public:
       Time& setToNow();
       Time(unsigned int min = 0);

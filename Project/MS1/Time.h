@@ -1,9 +1,10 @@
 #ifndef SDDS_TIMER_H
 #define SDDS_TIMER_H
 #include <iostream>
+
 namespace sdds {
    class Time {
-      unsigned int m_min;
+      int m_min;
    public:
       Time& setToNow();
       Time(unsigned int min = 0);
@@ -24,6 +25,7 @@ namespace sdds {
       operator unsigned int()const;
       operator int()const;
    };
+
    std::ostream& operator<<(std::ostream& ostr, const Time& D);
    std::istream& operator>>(std::istream& istr, Time& D);
 }

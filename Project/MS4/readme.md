@@ -1,8 +1,8 @@
  # Project: General Hospital Pre-Triage Application
 - [MS1 V1.0 due March 16th](#milestone-1)
 - [MS2 V1.0 due March 22nd](#milestone-2)
-- [MS3 N/A]()
-- [MS4 N/A]()
+- [MS3 V1.0 due March 27th](#milestone-3)
+- [MS4 V1.0 due April 2nd](#milestone-4)
 - [MS5 N/A]()
 
 Because of the pandemic and prevention of the spread of COVID19, hospitals need to screen the patients and separate those in need of COVID-test from others. This has to be done in an orderly fashion by letting the patients know what is the expected wait time and let them know when they can be admitted to prevent lineups. 
@@ -221,16 +221,19 @@ last value entered: 20
 ### getcstr()
 ```C++
 char* getcstr(
-   const char* prompt = nullptr // User entry prompt
+   const char* prompt = nullptr,   // User entry prompt
+   std::istream& istr = std::cin,  // the Stream to read from
+   char delimiter = '\n'    // Delimiter to mark the end of data
 );
+
 ```
 Prompts the user for the entry if the prompt argument is not null. 
 
-Receives an unknown size string from the console and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. 
+Receives an unknown size string from the istream object and allocates a dynamic Cstring to the size of the string and copies the value of the string into it. (Make sure null termination is put into account when setting the size)
 
 In the end, it will return the dynamically allocated memory. 
 
-> Challenge: Implement this without using the C++ **string** class. (Make sure to notify your professor of the implementation in your final project reflection)
+> Optional Challenge: Implement this without using the C++ **string** class. (Make sure to notify your professor of the implementation in your final project reflection)
 
 #### getcstr unit test
 
@@ -854,4 +857,555 @@ and follow the instructions.
 
 - *2??* is replaced with your subject code
 
+# Milestone 3
+
+## The Ticket Module (implementation provided)
+
+The Ticket class encapsulates a Ticket to be given to the patients when they arrive. Read the code, understand it, and use the logic and the functionalities throughout the project. 
+
+```C++
+#ifndef SDDS_TICKET_H_
+#define SDDS_TICKET_H_
+#include "Time.h"
+#include "IOAble.h"
+namespace sdds {
+   class Ticket:public IOAble{
+      Time m_time;  
+      int m_number;
+   public:
+      Ticket(int number);
+      operator Time()const;
+      int number()const;
+      void resetTime();
+      std::ostream& csvWrite(std::ostream& ostr)const;
+      std::istream& csvRead(std::istream& istr);
+      std::ostream& write(std::ostream& ostr )const;
+      std::istream& read(std::istream& istr);
+   };
+}
+#endif // !SDDS_TICKET_H_
+```
+### Member Variables
+#### Time m_time;
+The time the Ticket was issued
+#### int m_Number;
+The ticket number; A sequential integer, starting from one and unique for each lineup.
+### Member functions and constructor
+#### Ticket(int number);
+Constructs a Ticket by setting the **m_number** member variable
+#### operator Time()const;
+When Ticket is casted to **Time** it will return the **m_time**
+#### int number()const;
+A query returning the number of the ticket
+#### void resetTime();
+Sets the Ticket time to the current time.
+### Virtual function overrides
+#### csvWrite
+Inserts comma-separated ticket number and time into ostream.
+#### csvRead
+Extracts the ticket number and time in a comma-separated format from istream.
+#### write
+Inserts a ticket into the ostream to be displayed on the console.
+#### read
+Extracts the ticket information from istream.  This function works the same as csvRead. 
+
+## The Patient Module
+
+Create an abstract IOAble patient class (the patient class is a derived class from IOAble).  The patient class is responsible to encapsulate a general patient arriving at the hospital.  In later designs (MS4) the patient class will be inherited into a COVID test patient and a triage patient.  
+
+The following are the mandatory properties of the patient class.
+
+### Member Variables and Objects
+#### the patient name
+A character pointer variable to hold the name of the patient in a Cstring dynamically.
+#### the OHIP number
+An integer to hold the OHIP insurance number (exactly 9 digits) of the patient.
+#### the ticket
+A **Ticket** object to hold the ticket of the patient for the lineup.
+#### the file IO flag
+A Boolean flag. This flag will be set to **true** if the patient object is to be written into or read from a **file** (comma separated value), otherwise, this flag will be set to **false** if the patient object is to be written on or read from the **console**.
+
+### Constructor and destructor
+A patient can be instantiated using a ticket number (an integer) and a file IO flag (a Boolean).  The ticket number is used to initialize the member [ticket object](#the-ticket). The file IO is used to initialize the member [file IO flag](#the-file-io-flag). 
+
+When a patient has instantiated it, If the file IO flag is not provided the default value **"false"** is passed also if the ticket number is not provided the default value **zero (0)** is passed.
+
+### Copying and assignment.
+A patient cannot be copied or assigned to another patient; 
+
+### Destructor
+The destructor of the patient will deallocate the dynamically allocated [patient name Cstring](#the-patient-name).
+
+### Member functions
+#### Pure Virtual Function type()
+Create a pure virtual function called **type** that returns a character and is incapable of modifying the current object.
+In future derived objects, this function will return a single character that identifies the type of the patient (COVID test patient or Triage patient).
+
+#### FileIO query and modifier
+##### fileIO query
+Create a query called fileIO that returns the member [file IO flag](#the-file-io-flag).  This query is incapable of modifying the current object.
+##### fileIO modifier
+Create a modifier member function called fileIO that receives a Boolean value to set the member [fileIO flag](#the-file-io-flag).
+
+#### operator== overloads
+##### character comparison
+Overload the operator== to compare the current object with an incoming single character and return true if the single character is the same as the return value of [the pure virtual type member function](#pure-virtual-function-type).  This operator receives a single character and returns true or false and can not modify the current object.
+##### comparing to another patient
+Overload the operator to compare the current object to another patient and return true if the type of the current patient is the same as the type of the other patient.
+This operator receives a constant reference of a patient object, and returns true or false, and can not modify the current object.
+
+#### setArrivalTime function
+Sets the time of the ticket of the patient to the current time.
+This function neither receives nor returns any value.
+
+#### Time cast operator overload
+If the patient is casted to the Time type it should return the time of the ticket.
+This cast overload can not modify the current object.
+
+#### number
+Create a query function called **number** that returns the number of the ticket.
+This function can not modify the current object.
+
+### pure virtual function overwrites.
+#### csvWrite
+Inserts the following values into the ostream in a comma-separated format.  After the values are inserted it will insert a single "comma", and then call the csvWrite function of the member [ticket object](#the-ticket) and return the ostream.
+
+Here is the sequence of the values inserted into ostream
+```Text
+returned value of type() function
+','
+name of the patient
+','
+OHIP number
+','
+```
+then it will call the csvWrite function of the member [ticket object](#the-ticket).
+
+#### csvRead
+The csvRead function extracts all the values in the same order as the csvWrite function, except for the type.<br />
+- Start with the extraction with the name of the patient up to the comma (**','**) character and dynamically hold it in "[the patient name pointer](#the-patient-name)", dicarding the comma (**','**) delimiter . *Make sure that [the name pointer](#the-patient-name) is deleted before the allocation to guarantee there is no memory leak.* 
+- then extract an integer from istream into the OHIP member variable.
+- discard the delimeter 
+- Finally, end the extraction by calling the csvRead of the member [ticket object](#the-ticket).
+- return the istream reference at the end.
+
+#### write
+Inserts the patient information into the ostream to be displayed on the console.
+- insert  the member [ticket object](#the-ticket into ostream
+- go to newline
+- insert the name up to 25 character (ingnore the rest if more that 25 characters)
+- insert ```", OHIP: "```
+- insert the OHIP number number
+- return the ostream
+
+#### read
+Extracts the ticket information from the console using istream as follows:
+- Prompt: ```"Name: "```
+- Extract the name of the patient up to the newline (**'\n'**) character and dynamically hold it in "[the patient name pointer](#the-patient-name)", dicarding the newline(**'\n'**) delimiter . *Make sure that [the name pointer](#the-patient-name) is deleted before the allocation to guarantee there is no memory leak.* 
+- Prompt: ```"OHIP: "```
+- Extract the 9 digit OHIP number from istream; validate it and make sure it is 9 digits. 
+- return the istream reference at the end.
+
+Execution example:  
+```Text
+Name: John Doe
+OHIP: abc
+Bad integer value, try again: 100
+Invalid OHIP Number, [100000000 <= value <= 999999999]: 123123123
+```
+
+## The tester program.
+Read and study the tester program and understand how it works. 
+
+## ms3Tester.cpp Execution Sample 
+
+```Text
+Enter The following:
+-------------------
+John Doe
+abc
+100
+123123123
+12:34
+-------------------
+Name: John Doe
+OHIP: abc
+Bad integer value, try again: 100
+Invalid OHIP Number, [100000000 <= value <= 999999999]: 123123123
+Enter current time: 12:34
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+Ticket No: 24, Issued at: 12:34
+John Doe, OHIP: 123123123
+2- The output should be :
+Ticket No: 24, Issued at: 12:34
+John Doe, OHIP: 123123123
+
+1- Your comma separated ouput:
+W,John Doe,123123123,24,12:34
+2- comma separated ouput should be:
+W,John Doe,123123123,24,12:34
+
+Enter the following:
+>Jo Lee,234234234,200,12:50
+>Jo Lee,234234234,200,12:50
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+Ticket No: 200, Issued at: 12:50
+Jo Lee, OHIP: 234234234
+2- The output should be:
+Ticket No: 200, Issued at: 12:50
+Jo Lee, OHIP: 234234234
+
+Testing File IO:
+1 -----------------------------------------------
+Ticket No: 10, Issued at: 12:50
+David Mason, OHIP: 111111111
+
+2 -----------------------------------------------
+Ticket No: 11, Issued at: 12:51
+Nick Gilmour, OHIP: 222222222
+
+3 -----------------------------------------------
+Ticket No: 12, Issued at: 12:52
+Roger Wright, OHIP: 333333333
+
+4 -----------------------------------------------
+Ticket No: 13, Issued at: 12:53
+Rick Waters, OHIP: 333333333
+
+5 -----------------------------------------------
+Ticket No: 14, Issued at: 12:54
+A name that is way way wa, OHIP: 444444444
+
+ms3out.csv-----------------------
+W,David Mason,111111111,10,12:50
+W,Nick Gilmour,222222222,11,12:51
+W,Roger Wright,333333333,12,12:52
+W,Rick Waters,333333333,13,12:53
+W,A name that is way way way way way way way way too long,444444444,14,12:54
+---------------------------------
+Testing operator== overloads:
+Success!
+Success!
+Testing Time cast and number:
+Sections 1 and 2 should match:
+
+1- Your output on screen:
+W, Ticket Time: 12:54
+W, Ticket number: 14
+2- The output should be:
+W, Ticket Time: 12:54
+W, Ticket number : 14
+
+```
+
+
+## MS3 Submission and the due date
+Milestone 3 suggested due date is on March 27th.
+
+> If you would like to successfully complete the project and be on time, try to meet all the due dates of the milestones.
+
+### Files for submission
+``` Text
+ms3.csv
+IOAble.cpp
+IOAble.h
+utils.cpp
+utils.h
+Time.cpp  
+Time.h    
+Ticket.cpp
+Ticket.h
+Patient.cpp
+Patient.h
+ms3Tester.cpp
+```
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler as shown before and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m3
+replace ?? with yoru subject code (44 or 00)
+```
+and follow the instructions.
+
+
+
+# Milestone 4
+> Note that you may have to modify or correct some of your implementations done in previous milestones, even though you passed the previous (milestones) testers successfully. This is a natural course of developing an application. There is no need to notify your professor about this unless you would like to get advice on the matter. 
+
+Continue the implementation of the Pre-triage application by implementing the COVID patient and the triage patient modules. 
+
+## The CovidPatient module
+This module has one integer global variable called **nextCovidTicket** that is initialized to **one**.  This global variable will be used to determine what is the ticket number of the next COVID test Patient.  Each time a new **CovidPatient** object is created the value of the **nextCovidTicket** will be increased by **one**.  The scope of the global **nextCovidTicket** variable is only the **CovidPatient** module to make sure that the ticket numbers of Covid patients are kept separate from the Triage patients.
+
+The **CovidPatient** class is publicly derived from the **Patient** class. The **CovidPatient** class does not add any member variables or properties to the **Patient** module.
+
+The **CovidPatient** class has one **default constructor**, implements the pure virtual **type()** function and re-implements the two **read** functions and the **write** fucniton of the base class **Patient** as follows:
+
+### Default Constructor
+Sets the Ticket number to the current global value and then increases the global value by one.
+#### implementation
+The default constructor passes the **nextCovidTicket** global variable to the **constructor** of the base class **Patient** and then it will increase the value of **nextCovidTicket** global variable by **one**.
+
+### The type() virtual function
+Identifies the Patient object as a Covid patient by returning the letter **C**.
+#### implementation
+This function only returns the character **'C'**;
+
+### csvRead virtual function override
+Reads a comma-separated record of a Patient and sets the global ticket number to the next number after the Patient's ticket number.
+#### implementation
+First this function will call the **csvRead** function of the base class **Patient**, afterwards it will set the **nextCovidTicket** global variable to the return value of the **number()** function of the **Patient** class plus **one**. 
+Then it will ignore the terminating **'\n'** character.
+Finally, it will return the istream reference.
+
+### write virtual function override.
+Based on the return value of the **fileIO** method it will either write the patient in a comma-separated format or a descriptive format for screen or ticket. 
+#### implementation
+If the **fileIO** member function returns **true**, it will call the **csvWrite** function of the base class, otherwise it will first insert **"COVID TEST"** into the **ostream** object and goes to **newline**. Then it will call the **write()** function of the base class and then goes to **newline**.
+
+Then it will end the function by returning the **ostream** reference.
+
+### read virtual function override. 
+Based on the return value of the **fileIO** method it will either read the patient in a comma-separated format from istream or perform a fool-proof entry from the console.
+#### implementation
+If the **fileIO** member function returns true it will call the **csvRead** function, otherwise, it will call the read function of the base class.
+
+Then it will end the function by returning the **istream** reference.
+
+### Destructor
+This class does not need a destructor.
+
+## the CovidPatient Tester (CPTester.cpp) output
+```Text
+Testing CovidPatient:
+Enter the following:
+Enter current time: 12:34
+Name: aaa
+OHIP: 111111111
+Enter current time: 12:34
+Enter Patient information:
+Name: aaa
+OHIP: 111111111
+Enter the following:
+Enter current time: 12:35
+Name: bbb
+OHIP: 222222222
+Enter current time: 12:35
+Enter Patient information:
+Name: bbb
+OHIP: 222222222
+
+Patients information entered:
+COVID TEST
+Ticket No: 1, Issued at: 12:34
+aaa, OHIP: 111111111
+
+COVID TEST
+Ticket No: 2, Issued at: 12:35
+bbb, OHIP: 222222222
+
+CSV output:
+C,aaa,111111111,1,12:34
+C,bbb,222222222,2,12:35
+
+Testing CSV input:
+Enter the following:
+>ccc,333333333,10,23:45
+>ccc,333333333,10,23:45
+
+Data entered:
+COVID TEST
+Ticket No: 10, Issued at: 23:45
+ccc, OHIP: 333333333
+
+Testing global ticket number variable:
+Enter the following:
+Enter current time: 23:55
+Name: ddd
+OHIP: 444444444
+Enter current time: 23:55
+Name: ddd
+OHIP: 444444444
+Patient information entered:
+COVID TEST
+Ticket No: 11, Issued at: 23:55
+ddd, OHIP: 444444444
+```
+
+## The TriagePatient Module
+This module has one integer global variable called **nextTriageTicket** that is initialized to **one**.  This global variable will be used to determine what is the ticket number of the next triage Patient.  Each time a new **TriagePatient** is created the value of the **nextTriageTicket** will be increased by **one**.  The scope of the global **nextTriageTicket** variable is only the TriagePatient module.
+
+The **TriagePatient** class is publicly derived from the **Patient** class. The **TriagePatient** class adds only one character pointer member variable to the **Patient** module to dynamically hold the symptoms of the arriving patient for the triage centre.
+
+The **TriagePatient** class has one **default constructor**, implements the pure virtual **type()** function and re-implements the four **read and write** functions of the base class **Patient**.  It also has a destructor to make sure the dynamically allocated memory by the symptoms character array is deleted.
+
+### Symptoms character pointer member variable
+Create a character pointer member variable to point to a dynamically allocated Cstring holding the list of the symptoms of the TriagePatient.
+
+
+### Default Constructor
+Initializes the symptoms character pointer to null and then sets the Triage Ticket number to the current global value and then increases the global value by one.
+
+#### implementation
+The default constructor initializes the character pointer member variable to null and then passes the **nextTriageTicket** global variable to the **constructor** of the base class **Patient** and then it will increase the value of **nextTriageTicket** global variable by **one**.
+
+### the type() virtual function
+Identifies the Patient object as a Triage patient by returning the letter **T**.
+#### implementation
+This function only returns the character **'T'**;
+
+### csvWrite virtual function override.
+Adds the symptoms to the comma-separated values of the patient. 
+#### implementation
+This function calls the **csvWrite** function of the base class **Patient** then inserts a comma (',') character into the ostream object and then the symptoms of the patient. Finally, it returns the **ostream** reference.
+
+### the csvRead virtual function override 
+Reads a comma-separated record of a triage Patient and sets the global ticket number to the next number after the Patient's ticket number.
+#### implementation
+csvRead reads the TriagePatient's comma-separated information as follows:
+- Deletes the memory pointed by the [symptoms member variable](#symptoms-character-pointer-member-variable)
+- Calls the **csvRead** function of the base class.
+- Ignores a character (comma).
+- Dynamically reads a Cstring from the istream object up to **'\n'**, then extracts the **'\n'** from the istream and stores the address in the [symptoms member variable](#symptoms-character-pointer-member-variable);
+- sets the **nextTriageTicket** global variable to the return value of the number() member function of the Patient class plus one.
+- returns the istream reference.
+
+### write virtual function override.
+Based on the return value of the **fileIO** method it will either write the patient in a comma-separated format or a descriptive format for screen or ticket. 
+#### implementation
+If the **fileIO** member function returns **true**, it will call **csvWrite** function. otherwise, it will write the TriagePatient as follows:  
+- Inserts **"TRIAGE"** into the **ostream** object.
+- Goes to **newline**.  
+- It will call the **write()** function of the base class **Patient**.
+- Goes to **newline**. 
+- Inserts **"Symptoms: "** into the ostream object.
+- Inserts the symptoms member variable into the ostream object.
+- Goes to newline.
+
+The function ends by returning the **ostream** reference.
+
+### read virtual function override. 
+If the **fileIO** member function returns true it will call the **csvRead** function, 
+otherwise, it will do the following:
+- Deletes the memory pointed by the [symptoms member variable](#symptoms-character-pointer-member-variable)
+- Calls the **Read** function of the base class **Patient**.
+- prompts:  **"Symptoms: "**
+-Dynamically reads a Cstring from the istream object up to **'\n'**, then extracts the **'\n'** from the istream and stores the address in the [symptoms member variable](#symptoms-character-pointer-member-variable)
+
+The function ends by returning the **istream** reference.
+
+### Destructor
+Deletes the memory pointed by the [symptoms member variable](#symptoms-character-pointer-member-variable)
+
+## The TriagePatient Tester (TPTester.cpp) output
+```Text
+Testing TriagePatient:
+Enter the following:
+Enter current time: 12:34
+Name: aaa
+OHIP: 111111111
+Symptoms: aaa aaa aaa
+Enter current time: 12:34
+Enter Patient information:
+Name: aaa
+OHIP: 111111111
+Symptoms: aaa aaa aaa
+Enter the following:
+Enter current time: 12:35
+Name: bbb
+OHIP: 222222222
+Symptoms: bbb bbb bbb
+Enter current time: 12:35
+Enter Patient information:
+Name: bbb
+OHIP: 222222222
+Symptoms: bbb bbb bbb
+
+Patients information entered:
+TRIAGE
+Ticket No: 1, Issued at: 12:34
+aaa, OHIP: 111111111
+Symptoms: aaa aaa aaa
+
+TRIAGE
+Ticket No: 2, Issued at: 12:35
+bbb, OHIP: 222222222
+Symptoms: bbb bbb bbb
+
+CSV output:
+T,aaa,111111111,1,12:34,aaa aaa aaa
+T,bbb,222222222,2,12:35,bbb bbb bbb
+
+Testing CSV input:
+Enter the following:
+>ccc,333333333,10,23:45,ccc ccc ccc
+>ccc,333333333,10,23:45,ccc ccc ccc
+
+Data entered:
+TRIAGE
+Ticket No: 10, Issued at: 23:45
+ccc, OHIP: 333333333
+Symptoms: ccc ccc ccc
+
+Testing global ticket number variable and DMA:
+Enter the following:
+Enter current time: 23:55
+Name: ddd
+OHIP: 444444444
+Copy and paste the follwoing for Symptoms:
+Socks Box Knox Know in box. Fox in socks. Knox on fox In socks in box. Socks on Knox And Knox in box. Fox in socks On box on Knox. Chicks with bricks come. Chicks with blocks come. Chicks with Bricks and Blocks and clocks come. Look, sir.Look, sir. Mr Knox, sir. Let's do tricks with Bricks and blocks, sir. Let's do tricks with Chicks and clocks, sir. First, I'll make a Quick trick brick stack. Then I'll make a Quick trick block stack.
+Enter current time: 23:55
+Name: ddd
+OHIP: 444444444
+Symptoms: Socks Box Knox Know in box. Fox in socks. Knox on fox In socks in box. Socks on Knox And Knox in box. Fox in socks On box on Knox. Chicks with bricks come. Chicks with blocks come. Chicks with Bricks and Blocks and clocks come. Look, sir.Look, sir. Mr Knox, sir. Let's do tricks with Bricks and blocks, sir. Let's do tricks with Chicks and clocks, sir. First, I'll make a Quick trick brick stack. Then I'll make a Quick trick block stack.
+Patient information entered:
+TRIAGE
+Ticket No: 11, Issued at: 23:55
+ddd, OHIP: 444444444
+Symptoms: Socks Box Knox Know in box. Fox in socks. Knox on fox In socks in box. Socks on Knox And Knox in box. Fox in socks On box on Knox. Chicks with bricks come. Chicks with blocks come. Chicks with Bricks and Blocks and clocks come. Look, sir.Look, sir. Mr Knox, sir. Let's do tricks with Bricks and blocks, sir. Let's do tricks with Chicks and clocks, sir. First, I'll make a Quick trick brick stack. Then I'll make a Quick trick block stack.
+```
+
+## The tester program.
+Read and study the tester program and understand how it works. 
+
+## ms4Tester.cpp 
+
+The ms4Tester program is the execution of both modules combined.
+
+## MS4 Submission and the due date
+Milestone 4 is due on Friday, Apr 2nd.
+
+### MS4 files for submission
+```text
+IOAble.cpp
+IOAble.h
+Patient.h
+Patient.cpp
+Ticket.h
+Ticket.cpp
+Time.h
+Time.cpp
+utils.h
+utils.cpp
+CovidPatient.h
+CovidPatient.cpp
+TriagePatient.h
+TriagePatient.cpp
+ms4Tester.cpp
+```
+
+Upload your source code and the tester program to your `matrix` account. Compile and run your code using the `g++` compiler as shown before and make sure that everything works properly.
+
+Then, run the following command from your account (replace `profname.proflastname` with your professor’s Seneca userid):
+```
+~profname.proflastname/submit 2??/prj/m4
+replace ?? with yoru subject code (44 or 00)
+```
+and follow the instructions.
 

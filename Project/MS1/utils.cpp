@@ -1,11 +1,9 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <string>
 #include <cstring>
 #include "utils.h"
 #include "Time.h"
+
 using namespace std;
 namespace sdds {
 	bool debug = false;  // made global in utils.h
@@ -18,7 +16,7 @@ namespace sdds {
 				cin.clear();
 				cin >> t;   // needs extraction operator overloaded for Time
 				if (!cin) {
-					cout << "Invlid time, try agian (HH:MM): ";
+					cout << "Invalid time, try agian (HH:MM): ";
 					cin.clear();
 				} else {
 					mins = int(t);
@@ -34,52 +32,54 @@ namespace sdds {
 	}
 
 	int getInt(const char* prompt) {
-		std::string input;
-		bool valid;
-		int errorCount = 0;
+		bool valid = true;
+		int input = -1;
 
-		if (prompt != NULL) {
+		if (prompt != nullptr) {
 			std::cout << prompt;
 		}
 
 		do {
 			valid = true;
-			errorCount = 0;
-
-			std::getline(std::cin, input);
-			
-			for (unsigned i = 0; i < input.length(); i++) {
-				if (!isdigit(input[i])) {
-					valid = false;
-					errorCount++;
-				}
-			}
-			if ((unsigned)errorCount >= input.length()) {
+			std::cin >> input;
+			if (std::cin.fail()) {
+				std::cin.clear();
+				std::cin.ignore(512, '\n');
+				valid = false;
 				std::cout << "Bad integer value, try again: ";
+			} else if (std::cin.get() != '\n') {
 				std::cin.clear();
-			} else if (!valid) {
+				std::cin.ignore(512, '\n');
+				valid = false;
 				std::cout << "Enter only an integer, try again: ";
-				std::cin.clear();
 			}
+
+			
 		} while (!valid);
-		return std::stoi(input);
+		return input;
 	}
 
 	int getInt(int min, int max, const char* prompt, const char* errorMessage, bool showRangeAtError) {
-		int input = 0;
+		int input = -2;
+
 		do {
-			input = getInt(prompt);
-			if ((min > input || input > max)) {
+			if (input == -2) {
+				input = getInt(prompt);
+			} else {
+				input = getInt();
+			}
+
+			if (min > input || input > max) {
 				if (errorMessage != NULL) {
 					std::cout << errorMessage;
-					input = 0;
+					input = -1;
 				}
 				if (showRangeAtError) {
-					std::cout << '[' << min << " <= value <= " << max << ']';
-					input = 0;
+					std::cout << '[' << min << " <= value <= " << max << ']' << ": ";
+					input = -1;
 				}
 			}
-		} while (input == 0);
+		} while (input <= -1);
 		return input;
 	}
 
@@ -88,7 +88,7 @@ namespace sdds {
 		char temp[256] = { 0 };
 		if (prompt != NULL) {
 			std::cout << prompt;
-			if (delimiter != NULL) {
+			if (delimiter != '\0') {
 				istr.getline(temp, 256, delimiter);
 			} else {
 				istr.getline(temp, 256);
@@ -98,9 +98,11 @@ namespace sdds {
 		strcpy(returned, temp);
 		return returned;
 	}
+
 	int getHour(int minutes) {
 		return minutes / 60;
 	}
+
 	int getMinute(int minutes) {
 		return minutes % 60;
 	}

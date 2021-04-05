@@ -17,9 +17,11 @@ namespace sdds {
 		int minutes = 0;
 
 		// Checks if m_min is positive. Breaks down m_mins to hours and minutes and displays in H:MM format when valid.
-		if (m_min > 0) {
-			hours = getHour((int)this);
-			minutes = getMinute((int)this);
+		hours = getHour(m_min);
+		minutes = getMinute(m_min);
+		if (hours < 10) {
+			ostr << std::setw(2) << std::setfill('0') << hours << ':' << std::setw(2) << std::setfill('0') << minutes;
+		} else {
 			ostr << hours << ':' << std::setw(2) << std::setfill('0') << minutes;
 		}
 		return ostr;
@@ -35,7 +37,7 @@ namespace sdds {
 		if (!(istr >> hour) || hour < 0) {
 			istr.setstate(ios::failbit);
 		}
-		if (!(istr >> throwaway)) {
+		if (!(istr >> throwaway) || throwaway != ':') {
 			istr.setstate(ios::failbit);
 		}
 		if (!(istr >> minute) || minute < 0) {
@@ -63,7 +65,7 @@ namespace sdds {
 		if ((thisMinute - dMinute) < 0) {
 			thisMinute += 60;
 		}
-		diffMinute = dMinute;
+		diffMinute = thisMinute - dMinute;
 		m_min = (diffHour * 60) + diffMinute;
 		return *this;
 	}
@@ -85,7 +87,7 @@ namespace sdds {
 		if ((thisMinute - dMinute) < 0) {
 			thisMinute += 60;
 		}
-		diffMinute = dMinute;
+		diffMinute = thisMinute - dMinute;
 		newTime.m_min = (diffHour * 60) + diffMinute;
 		return newTime;
 	}
@@ -112,7 +114,7 @@ namespace sdds {
 	}
 
 	Time::operator int() const {
-		return (int)m_min;
+		return m_min;
 	}
 
 	std::ostream& operator<<(std::ostream& ostr, const Time& D) {

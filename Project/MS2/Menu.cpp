@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#include <cstring>
 #include "Menu.h"
 #include "utils.h"
 
@@ -26,7 +27,7 @@ namespace sdds {
 
 	int& Menu::operator>>(int& Selection) {
 		display();
-		Selection = getInt(0, m_noOfSel, "> ", "Invalid Option ", true);
+		Selection = getInt(0, m_noOfSel, "> ", "Invalid option ", true);
 		return Selection;
 	}
 

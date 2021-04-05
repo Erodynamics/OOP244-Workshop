@@ -15,10 +15,10 @@ namespace sdds {
 		bool unloadCargo();
 		std::ostream& write(std::ostream& os) const;
 		std::istream& read(std::istream& in);
-
-		friend std::ostream& operator<<(std::ostream& os, const Truck& vehicle);
-		friend std::istream& operator>>(std::istream& in, Truck& vehicle);
 	};
+
+	std::ostream& operator<<(std::ostream& os, const Truck& vehicle);
+	std::istream& operator>>(std::istream& in, Truck& vehicle);
 }
 
 #endif // _SDDS_TRUCK_H

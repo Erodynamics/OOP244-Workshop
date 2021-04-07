@@ -24,7 +24,6 @@ namespace sdds {
 	   Patient::csvWrite(ostr);
 	   ostr << ',';
 	   ostr << m_symptoms;
-	   nextTriageTicket = number();
 	   return ostr;
    }
 
@@ -38,7 +37,6 @@ namespace sdds {
 		   ostr << "Symptoms: ";
 		   ostr << m_symptoms;
 		   ostr << std::endl;
-		   m
 	   }
 
 	   return ostr;

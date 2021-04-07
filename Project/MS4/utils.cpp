@@ -85,13 +85,13 @@ namespace sdds {
 
 	char* getcstr(const char* prompt, std::istream& istr, char delimiter) {
 		char* returned;
-		char temp[256] = { 0 };
+		char temp[1024] = { 0 };
 		if (prompt != NULL) {
 			std::cout << prompt;
 			if (delimiter != '\0') {
-				istr.getline(temp, 256, delimiter);
+				istr.getline(temp, 1024, delimiter);
 			} else {
-				istr.getline(temp, 256);
+				istr.getline(temp, 1024);
 			}
 		}
 		returned = new char[strlen(temp) + 1]();

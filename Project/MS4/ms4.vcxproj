@@ -141,10 +141,10 @@
   <ItemGroup>
     <ClCompile Include="CovidPatient.cpp" />
     <ClCompile Include="IOAble.cpp" />
-    <ClCompile Include="ms4Tester.cpp" />
     <ClCompile Include="Patient.cpp" />
     <ClCompile Include="Ticket.cpp" />
     <ClCompile Include="Time.cpp" />
+    <ClCompile Include="TPTester.cpp" />
     <ClCompile Include="TriagePatient.cpp" />
     <ClCompile Include="utils.cpp" />
   </ItemGroup>

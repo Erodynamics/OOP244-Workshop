@@ -29,10 +29,10 @@ namespace sdds {
 		operator Time() const;
 		int number() const;
 
-		std::ostream& csvWrite(std::ostream& ostr) const override;
 		std::istream& csvRead(std::istream& istr) override;
-		std::ostream& write(std::ostream& ostr) const override;
 		std::istream& read(std::istream& istr) override;
+		std::ostream& csvWrite(std::ostream& ostr) const override;
+		std::ostream& write(std::ostream& ostr) const override;
 		
 	};
 }

@@ -9,9 +9,9 @@ namespace sdds {
 		CovidPatient();
 		char type() const;
 
-		std::istream& csvRead(std::istream& istr);
-		std::istream& read(std::istream& istr);
-		std::ostream& write(std::ostream& ostr) const;
+		std::istream& csvRead(std::istream& istr) override;
+		std::istream& read(std::istream& istr) override;
+		std::ostream& write(std::ostream& ostr) const override;
 	};
 }
 

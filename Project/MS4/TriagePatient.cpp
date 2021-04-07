@@ -24,7 +24,7 @@ namespace sdds {
 	   Patient::csvWrite(ostr);
 	   ostr << ',';
 	   ostr << m_symptoms;
-	   nextTriageTicket = number();
+	   nextTriageTicket = number() + 1;
 	   return ostr;
    }
 
@@ -38,14 +38,13 @@ namespace sdds {
 		   ostr << "Symptoms: ";
 		   ostr << m_symptoms;
 		   ostr << std::endl;
-		   m
 	   }
 
 	   return ostr;
    }
 
    std::istream& TriagePatient::csvRead(std::istream& istr) {
-	   char tempSymptoms[512];
+	   char tempSymptoms[1024];
 
 	   delete[] m_symptoms;
 	   m_symptoms = nullptr;
@@ -53,11 +52,11 @@ namespace sdds {
 	   Patient::csvRead(istr);
 
 	   istr.ignore(256, ',');
-	   istr.getline(tempSymptoms, 512, '\n');
+	   istr.getline(tempSymptoms, 1024, '\n');
 	   m_symptoms = new char[strlen(tempSymptoms) + 1]();
 	   strcpy(m_symptoms, tempSymptoms);
 
-	   nextTriageTicket++;
+	   nextTriageTicket = number() + 1;
 	   return istr;
    }
 
@@ -70,7 +69,6 @@ namespace sdds {
 
 		   Patient::read(istr);
 		   m_symptoms = getcstr("Symptoms: ", istr);
-		   
 	   } 
 	   return istr;
    }

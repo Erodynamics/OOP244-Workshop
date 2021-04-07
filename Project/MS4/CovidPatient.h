@@ -5,12 +5,13 @@
 
 namespace sdds {
 	class CovidPatient : public Patient {
+	public:
 		CovidPatient();
-		char type();
+		char type() const;
 
 		std::istream& csvRead(std::istream& istr);
 		std::istream& read(std::istream& istr);
-		std::ostream& write(std::ostream& ostr);
+		std::ostream& write(std::ostream& ostr) const;
 	};
 }
 

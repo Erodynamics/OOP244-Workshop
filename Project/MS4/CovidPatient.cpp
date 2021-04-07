@@ -6,7 +6,7 @@ namespace sdds {
        nextCovidTicket++;
    }
 
-   char CovidPatient::type(){
+   char CovidPatient::type() const{
        return 'C';
    }
 
@@ -26,12 +26,13 @@ namespace sdds {
        return istr;
    }
 
-   std::ostream& CovidPatient::write(std::ostream& ostr) {
+   std::ostream& CovidPatient::write(std::ostream& ostr) const {
        if (this->fileIO()) {
            Patient::csvWrite(ostr);
        } else {
            ostr << "COVID TEST\n";
            Patient::write(ostr);
+           ostr << std::endl;
        }
 
        return ostr;

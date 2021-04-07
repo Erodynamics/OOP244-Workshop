@@ -85,7 +85,7 @@ namespace sdds {
 	std::istream& Patient::read(std::istream& istr) {
 		m_name = nullptr;
 		m_name = getcstr("Name: ", istr, '\n');
-		m_ohip = getInt(100000000, 999999999, "OHIP:", "Invalid OHIP Number, ");
+		m_ohip = getInt(100000000, 999999999, "OHIP: ", "Invalid OHIP Number, ");
 		return istr;
 	}
 }

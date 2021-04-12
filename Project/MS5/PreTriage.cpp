@@ -30,6 +30,7 @@ namespace sdds {
 		std::cout << "Saving Average Wait Times," << std::endl;
 		std::cout << "   COVID Test: " << m_averCovidWait << std::endl;
 		std::cout << "   Triage: " << m_averTriageWait << std::endl;
+		std::cout << "Saving m_lineup..." << std::endl;
 
 		output << m_averCovidWait << ',' << m_averTriageWait << std::endl;
 
@@ -40,7 +41,6 @@ namespace sdds {
 				m_lineup[i]->csvWrite(std::cout);
 				output << std::endl;
 				std::cout << std::endl;
-
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace sdds {
 		}
 
 		delete[] m_dataFilename;
-		std::cout << "\ndone!";
+		std::cout << "done!\n";
 	}
 
 	void PreTriage::run(void) {
@@ -251,7 +251,7 @@ namespace sdds {
 		if (m_lineupSize == 0) {
 			std::cout << "No data or bad data file!\n\n";
 		} else {
-			std::cout << m_lineupSize << " Records Imported...\n\n";
+			std::cout << m_lineupSize << " Records imported...\n\n";
 		}
 	}
 }

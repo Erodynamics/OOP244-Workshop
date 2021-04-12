@@ -46,7 +46,10 @@ namespace sdds {
 
 		output.close();
 
-		delete[] *m_lineup;
+		for (int i = 0; i < maxNoOfPatients; i++) {
+			delete m_lineup[i];
+		}
+
 		delete[] m_dataFilename;
 		std::cout << "\ndone!";
 	}
@@ -246,10 +249,9 @@ namespace sdds {
 		}
 
 		if (m_lineupSize == 0) {
-			std::cout << "No data or bad file!\n\n";
+			std::cout << "No data or bad data file!\n\n";
 		} else {
 			std::cout << m_lineupSize << " Records Imported...\n\n";
 		}
 	}
-
 }

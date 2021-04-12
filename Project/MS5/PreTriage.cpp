@@ -176,9 +176,9 @@ namespace sdds {
 		
 		// This is sketch and GCC might complain about the type conversions.
 		if (p.type() == 'T') {
-			m_averTriageWait = ((CT - p).operator int() + (m_averTriageWait.operator int() * (p.number() - 1) / p.number()));
+			m_averTriageWait = (((CT - p).operator int() + (m_averTriageWait.operator int() * (p.number() - 1))) / p.number());
 		} else if (p.type() == 'C') {
-			m_averCovidWait = ((CT - p).operator int() + (m_averCovidWait.operator int() * (p.number() - 1) / p.number()));
+			m_averCovidWait = (((CT - p).operator int() + (m_averCovidWait.operator int() * (p.number() - 1))) / p.number());
 		}
 	}
 
